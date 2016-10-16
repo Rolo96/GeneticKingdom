@@ -1,16 +1,17 @@
 #include "enemigo.h"
 #include <QPixmap>
 #include <QTimer>
-#include <qmath.h>
 #include <iostream>
+#include "List.cpp"
 using namespace std;
+
+List<QPoint> ruta;
 Enemigo::Enemigo(QGraphicsItem *parent)
 {
     setPos(200,200);
-    sheet = QPixmap(":/Imagenes/Men.png");
+    sheet = QPixmap(":/Imagenes/Macho.png");
     sprite = sheet.copy(0, 138, 33, 69);
     setPixmap(sprite);
-
     QTimer *temporizador = new QTimer();
     QTimer *temporizador2 = new QTimer();
     connect(temporizador,SIGNAL(timeout()),this,SLOT(mover()));
@@ -50,4 +51,8 @@ void Enemigo::mover(){
         setPos(x()-3, y());
         mY=69;
     }
+}
+
+void Enemigo::setRuta(List<QPoint> pRuta){
+    ruta=pRuta;
 }

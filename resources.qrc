@@ -1,7 +1,18 @@
 <RCC>
     <qresource prefix="/Imagenes">
-        <file>tower.png</file>
-        <file>Men.png</file>
-        <file>mapa1.jpg</file>
+        <file>Dragon.png</file>
+        <file>DragonMutado.png</file>
+        <file>Macho.png</file>
+        <file>MachoMutado.png</file>
+        <file>Map.jpg</file>
+        <file>Mercenario.png</file>
+        <file>MercenarioMutado.png</file>
+        <file>Pelirroja.png</file>
+        <file>PelirrojaMutada.png</file>
+        <file>Robot.png</file>
+        <file>RobotMutado.png</file>
+        <file>Torre.png</file>
+        <file>torre2.png</file>
+        <file>torre3.png</file>
     </qresource>
 </RCC>

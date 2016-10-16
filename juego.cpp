@@ -3,10 +3,11 @@
 #include "tower.h"
 #include "enemigo.h"
 #include <QPixmap>
+#include <QDebug>
 #include "List.h"
 #include <iostream>
 #include <QMouseEvent>
-#include <QPoint>
+#include <QPointF>
 using namespace std;
 
 
@@ -22,7 +23,7 @@ Juego::Juego(){
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,1280,680);
     setScene(scene);
-    QPixmap pix(":/Imagenes/mapa1.jpg");
+    QPixmap pix(":/Imagenes/Map.jpg");
     scene->addPixmap(pix);
 
     setFixedSize(1280,680);
@@ -40,42 +41,50 @@ Juego::Juego(){
 void Juego:: mouseReleaseEvent ( QMouseEvent * event ){
   if(event->button() == Qt::LeftButton)
   {
-      QPoint punto = convertirCuadricula(event->pos());
+      QPointF punto = convertirCuadricula(event->pos());
       if (punto.x()!=-1){
-        punto = convertirPunto(punto);
-        Tower * tower = new Tower();
-        scene->addItem(tower);
-        tower->setPos(punto);
-        findPath();
+          if(path->grid[static_cast<int>(punto.y())][static_cast<int>(punto.x())]==1){
+              path->grid[static_cast<int>(punto.y())][static_cast<int>(punto.x())]=0;
+              //QPointF puntoCreacion;
+              //puntoCreacion.setX(0);
+              //puntoCreacion.setY(6);
+              //findPath(puntoCreacion);
+              findPath(convertirCuadricula(listaEnemigos.get_Node(0)->get_data()->pos()));
+              punto = convertirPunto(punto);
+              Tower * tower = new Tower();
+              scene->addItem(tower);
+              tower->setPos(punto);
+          }
       }
   }
 }
 
-QPoint Juego::convertirPunto(QPoint punto){
+QPointF Juego::convertirPunto(QPointF punto){
     QPoint puntoCreacion;
     puntoCreacion.setX(punto.x()*anchoX+inicioX);
     puntoCreacion.setY(punto.y()*anchoY+inicioY);
     return puntoCreacion;
 }
 
-QPoint Juego::convertirCuadricula(QPoint punto){
+QPointF Juego::convertirCuadricula(QPointF punto){
     if(punto.x()>=inicioX && punto.x()<=finX-anchoX){
         int posx, posy;
         posx= (-inicioX+punto.x())/anchoX;
         posy=(inicioY+punto.y())/anchoY;
-        QPoint puntoCreacion;
+        QPointF puntoCreacion;
         puntoCreacion.setX(posx);
         puntoCreacion.setY(posy);
         return puntoCreacion;
     }
     else{
-        QPoint puntoCreacion;
+        QPointF puntoCreacion;
         puntoCreacion.setX(-1);
         puntoCreacion.setY(-1);
         return puntoCreacion;
     }
 }
 
-void Juego:: findPath(){
-    path->trazar();
+List<QPoint> Juego:: findPath(QPointF pos){
+    qDebug()<< pos;
+    return path->trazar(pos);
 }

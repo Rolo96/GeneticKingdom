@@ -1,25 +1,12 @@
 #include "Pathfinding.h"
 #include <QDebug>
+#include "Array.h"
+#include "Array.cpp"
+#include <stdlib.h>
+#include "List.cpp"
 
 Pathfinding::Pathfinding(){}
 struct Pathfinding:: cell{int parent_i, parent_j;double f, g, h;};
-
-/* Description of the Grid-
-1--> The cell is not blocked
-0--> The cell is blocked */
-int grid[ROW][COL] =
-        {
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
-        };
 
 bool Pathfinding::isValid(int row, int col){
     return (row >= 0) && (row < ROW) &&
@@ -40,10 +27,10 @@ bool Pathfinding:: isDestination(int row, int col, Pair dest){
         return (false);
 }
 
-void Pathfinding:: trazar(){
-    Pair src = make_pair(6,0);
+List<QPoint> Pathfinding:: trazar(QPointF pos){
+    Pair src = make_pair(pos.y(),pos.x());
     Pair dest = make_pair(6, 15);
-    aStarSearch(grid, src, dest);
+    return aStarSearch(grid, src, dest);
 }
 
 double Pathfinding::calculateHValue(int row, int col, Pair dest){
@@ -51,7 +38,7 @@ double Pathfinding::calculateHValue(int row, int col, Pair dest){
                           + (col-dest.second)*(col-dest.second)));
 }
 
-void Pathfinding::tracePath(cell cellDetails[][COL], Pair dest){
+void Pathfinding::tracePath(cell cellDetails[][COL], Pair dest, List<QPoint>* pPuntos){
     qDebug() << "\nThe Path is ";
     int row = dest.first;
     int col = dest.second;
@@ -68,17 +55,20 @@ void Pathfinding::tracePath(cell cellDetails[][COL], Pair dest){
         col = temp_col;
     }
 
+    QPoint puntoCreacion;
     Path.push (make_pair (row, col));
     while (!Path.empty())
     {
         pair<int,int> p = Path.top();
         Path.pop();
-        qDebug() <<"( ";
-        qDebug() <<p.first;
-        qDebug() <<p.second;
-        qDebug() <<")";
+        //qDebug() <<"( ";
+        //qDebug() <<p.first;
+        //qDebug() <<p.second;
+        //qDebug() <<")";
+        puntoCreacion.setX(p.first);
+        puntoCreacion.setY(p.second);
+        pPuntos->add_end(puntoCreacion);
     }
-
     return;
 }
 
@@ -86,20 +76,21 @@ void Pathfinding::tracePath(cell cellDetails[][COL], Pair dest){
 // A Function to find the shortest path between
 // a given source cell to a destination cell according
 // to A* Search Algorithm
-void Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
+List<QPoint> Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
 {
+    List<QPoint> puntos;
     // If the source is out of range
     if (isValid (src.first, src.second) == false)
     {
         qDebug() <<"Source is invalid\n";
-        return;
+        return puntos;
     }
 
     // If the destination is out of range
     if (isValid (dest.first, dest.second) == false)
     {
         qDebug() <<"Destination is invalid\n";
-        return;
+        return puntos;
     }
 
     // Either the source or the destination is blocked
@@ -107,14 +98,14 @@ void Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
         isUnBlocked(grid, dest.first, dest.second) == false)
     {
         qDebug() <<"Source or the destination is blocked\n";
-        return;
+        return puntos;
     }
 
     // If the destination cell is the same as source cell
     if (isDestination(src.first, src.second, dest) == true)
     {
         qDebug() <<"We are already at the destination\n";
-        return;
+        return puntos;
     }
 
     // Create a closed list and initialise it to false which means
@@ -215,9 +206,10 @@ void Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
                 cellDetails[i-1][j].parent_i = i;
                 cellDetails[i-1][j].parent_j = j;
                 qDebug() <<"The destination cell is found\n";
-                tracePath (cellDetails, dest);
+                tracePath (cellDetails, dest,&puntos);
                 foundDest = true;
-                return;
+                puntos.print();
+                return puntos;
             }
                 // If the successor is already on the closed
                 // list or if it is blocked, then ignore it.
@@ -266,9 +258,10 @@ void Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
                 cellDetails[i+1][j].parent_i = i;
                 cellDetails[i+1][j].parent_j = j;
                 qDebug() <<"The destination cell is found\n";
-                tracePath(cellDetails, dest);
+                tracePath(cellDetails, dest, &puntos);
                 foundDest = true;
-                return;
+                puntos.print();
+                return puntos;
             }
                 // If the successor is already on the closed
                 // list or if it is blocked, then ignore it.
@@ -315,9 +308,10 @@ void Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
                 cellDetails[i][j+1].parent_i = i;
                 cellDetails[i][j+1].parent_j = j;
                 qDebug() <<"The destination cell is found\n";
-                tracePath(cellDetails, dest);
+                tracePath(cellDetails, dest, &puntos);
                 foundDest = true;
-                return;
+                puntos.print();
+                return puntos;
             }
 
                 // If the successor is already on the closed
@@ -367,9 +361,10 @@ void Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
                 cellDetails[i][j-1].parent_i = i;
                 cellDetails[i][j-1].parent_j = j;
                 qDebug() <<"The destination cell is found\n";
-                tracePath(cellDetails, dest);
+                tracePath(cellDetails, dest, &puntos);
                 foundDest = true;
-                return;
+                puntos.print();
+                return puntos;
             }
 
                 // If the successor is already on the closed
@@ -414,6 +409,7 @@ void Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
     if (foundDest == false)
         qDebug() <<"Failed to find the Destination Cell\n";
 
-    return;
+     qDebug() <<"Failed to find the Destination Cell\n";
+    return puntos;
 
 }

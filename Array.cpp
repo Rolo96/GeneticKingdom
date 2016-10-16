@@ -6,7 +6,7 @@
 template <typename T>
 Array<T>::Array(){
     _index=0;
-    _size=10;
+    _size=20;
     _array = new T[_size];
 }
 

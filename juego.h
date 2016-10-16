@@ -8,6 +8,7 @@
 #include "enemigo.h"
 #include <QMouseEvent>
 #include <QPoint>
+#include <QPointF>
 #include "Pathfinding.h"
 
 class Juego: public QGraphicsView {
@@ -16,10 +17,10 @@ public:
     QGraphicsScene * scene;
     List<Enemigo *> listaEnemigos;
     void mouseReleaseEvent ( QMouseEvent * event );
-    QPoint convertirPunto(QPoint punto);
-    QPoint convertirCuadricula(QPoint punto);
+    QPointF convertirPunto(QPointF punto);
+    QPointF convertirCuadricula(QPointF punto);
     int inicioX,anchoX,finX,inicioY,anchoY;
-    void findPath();
+    List<QPoint> findPath(QPointF pos);
 };
 
 #endif // JUEGO_H

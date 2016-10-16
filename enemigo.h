@@ -5,6 +5,8 @@
 #include <QObject>
 #include <QList>
 #include <QPointF>
+#include <QPoint>
+#include "List.h"
 
 class Enemigo: public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
@@ -14,6 +16,7 @@ public:
 public slots:
     void animar();
     void mover();
+    void setRuta(List<QPoint> pRuta);
 private:
     QList<QPointF> puntos;
     QPointF destino;
@@ -23,7 +26,6 @@ private:
     bool flag=true;
     QPixmap sprite;
     QPixmap sheet;
-
 };
 
 #endif // ENEMIGO_H

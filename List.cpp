@@ -3,7 +3,7 @@
 //
 
 #include "List.h"
-
+#include <QDebug>
 using namespace std;
 
 // Constructor por defecto
@@ -367,7 +367,7 @@ void List<T>::print()
         cout << "La Lista está vacía " << endl;
     } else {
         while (temp!=NULL) {
-            cout << temp->get_data()<<endl;
+            qDebug()<< temp->get_data()<<endl;
             temp = temp->get_next();
         }
     }

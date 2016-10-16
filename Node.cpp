@@ -2,7 +2,7 @@
 // Created by bryan on 04/09/16.
 //
 #include "Node.h"
-
+#include <QDebug>
 // Constructor por defecto
 template<typename T>
 Node<T>::Node()
@@ -23,7 +23,6 @@ Node<T>::Node(T pData)
 
 template<typename T>
 T Node<T>::get_data() const {
-    cout<<_data;
     return _data;
 }
 
