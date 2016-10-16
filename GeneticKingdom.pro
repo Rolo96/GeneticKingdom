@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     enemigo.cpp \
     Array.cpp \
     List.cpp \
-    Node.cpp
+    Node.cpp \
+    Pathfinding.cpp
 
 HEADERS  += mainwindow.h \
     tower.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     enemigo.h \
     Array.h \
     List.h \
-    Node.h
+    Node.h \
+    Pathfinding.h
 
 FORMS    += mainwindow.ui
 

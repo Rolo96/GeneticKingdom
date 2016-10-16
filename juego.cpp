@@ -10,7 +10,7 @@
 using namespace std;
 
 
-
+Pathfinding *path = new Pathfinding();
 Juego::Juego(){
     inicioX=110;
     finX=1208;
@@ -18,6 +18,7 @@ Juego::Juego(){
     inicioY=0;
     anchoY=68;
 
+    path = new Pathfinding();
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,1280,680);
     setScene(scene);
@@ -45,6 +46,7 @@ void Juego:: mouseReleaseEvent ( QMouseEvent * event ){
         Tower * tower = new Tower();
         scene->addItem(tower);
         tower->setPos(punto);
+        findPath();
       }
   }
 }
@@ -72,4 +74,8 @@ QPoint Juego::convertirCuadricula(QPoint punto){
         puntoCreacion.setY(-1);
         return puntoCreacion;
     }
+}
+
+void Juego:: findPath(){
+    path->trazar();
 }

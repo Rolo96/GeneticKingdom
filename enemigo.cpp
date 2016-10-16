@@ -51,4 +51,3 @@ void Enemigo::mover(){
         mY=69;
     }
 }
-
