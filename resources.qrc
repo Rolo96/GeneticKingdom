@@ -14,5 +14,6 @@
         <file>torre2.png</file>
         <file>torre3.png</file>
         <file>Map.jpg</file>
+        <file>bullet1.png</file>
     </qresource>
 </RCC>

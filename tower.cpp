@@ -5,10 +5,12 @@
 #include <QPolygonF>
 #include <QTimer>
 #include <QDebug>
+#include "bala.h"
+#include "juego.h"
 
 Tower::Tower(QGraphicsItem *parent){
     //setPixmap(QPixmap(":/Imagenes/Torre.png"));
-    sheet = QPixmap(":/Imagenes/Torre.png");
+    sheet = QPixmap(":/Imagenes/torre3.png");
     sprite = sheet.copy(0, 0, 120, 118).scaled(68,75);
     setPixmap(sprite);
     QVector<QPointF> puntos;
@@ -36,10 +38,52 @@ Tower::Tower(QGraphicsItem *parent){
 }
 
 void Tower::anima() {
+    Bala * bala = new Bala();
+
     setPixmap(QPixmap(sheet.copy(i*120, mY, 120, 118)).scaled(68,75));
     if(flag){
-        if(i==3){flag=false;i=-1;mY=120;}i++;
+        if(i==0){
+            bala->setX(pos().x()+34);
+            bala->setY(pos().y()+68);
+            bala->setRotation(90);
+            scene()->addItem(bala);
+        }else if(i==1){
+            bala->setX(pos().x()+68);
+            bala->setY(pos().y()+68);
+            bala->setRotation(45);
+            scene()->addItem(bala);
+        }else if(i==2){
+            bala->setX(pos().x()+68);
+            bala->setY(pos().y()+34);
+            bala->setRotation(0);
+            scene()->addItem(bala);
+        }else if(i==3){
+            bala->setX(pos().x()+68);
+            bala->setY(pos().y()+0);
+            bala->setRotation(315);
+            scene()->addItem(bala);
+            flag=false;i=-1;mY=120;}i++;
     }else{
-        if(i==3){flag=true;i=-1;mY=0;}i++;
+        if(i==0){
+            bala->setX(pos().x()+34);
+            bala->setY(pos().y()+0);
+            bala->setRotation(270);
+            scene()->addItem(bala);
+        }else if(i==1){
+            bala->setX(pos().x()+0);
+            bala->setY(pos().y()+0);
+            bala->setRotation(225);
+            scene()->addItem(bala);
+        }else if(i==2){
+            bala->setX(pos().x()+0);
+            bala->setY(pos().y()+34);
+            bala->setRotation(180);
+            scene()->addItem(bala);
+        }else if(i==3){
+            bala->setX(pos().x()+0);
+            bala->setY(pos().y()+68);
+            bala->setRotation(135);
+            scene()->addItem(bala);
+            flag=true;i=-1;mY=0;}i++;
     }
 }

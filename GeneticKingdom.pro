@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     Array.cpp \
     List.cpp \
     Node.cpp \
-    Pathfinding.cpp
+    Pathfinding.cpp \
+    bala.cpp
 
 HEADERS  += mainwindow.h \
     tower.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     Array.h \
     List.h \
     Node.h \
-    Pathfinding.h
+    Pathfinding.h \
+    bala.h
 
 FORMS    += mainwindow.ui
 

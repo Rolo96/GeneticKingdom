@@ -2,7 +2,7 @@
 #include <QPixmap>
 #include <QTimer>
 #include <iostream>
-#include "List.cpp"
+#include "juego.h"
 using namespace std;
 
 List<QPoint> ruta;
@@ -57,6 +57,7 @@ void Enemigo::mover(){
             setOrientacion();
         }
     }
+    colisiones();
 }
 
 void Enemigo::setRuta(List<QPoint> pRuta){
@@ -103,3 +104,14 @@ void Enemigo::setOrientacion(){
 }
 
 void Enemigo::correr(){temporizador->start(60);}
+
+void Enemigo::colisiones(){
+
+    QList<QGraphicsItem *> list = collidingItems() ;
+    foreach(QGraphicsItem * i , list)
+    {
+        if(this->vida<=0){
+            scene()->removeItem(this);
+        }
+    }
+}

@@ -19,6 +19,8 @@ public:
     int posX=0;
     int posY=0;
     int mY=138;
+    int vida=2;
+    void colisiones();
 public slots:
     void animar();
     void mover();
