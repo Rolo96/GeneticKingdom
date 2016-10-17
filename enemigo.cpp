@@ -6,53 +6,100 @@
 using namespace std;
 
 List<QPoint> ruta;
+List<QPoint> rutaNueva;
 Enemigo::Enemigo(QGraphicsItem *parent)
 {
-    setPos(200,200);
     sheet = QPixmap(":/Imagenes/Macho.png");
     sprite = sheet.copy(0, 138, 33, 69);
     setPixmap(sprite);
-    QTimer *temporizador = new QTimer();
+    temporizador = new QTimer();
     QTimer *temporizador2 = new QTimer();
     connect(temporizador,SIGNAL(timeout()),this,SLOT(mover()));
     connect(temporizador2,SIGNAL(timeout()),this,SLOT(animar()));
-    temporizador->start(20);
     temporizador2->start(50);
 }
 
-
 void Enemigo::animar() {
-    setPixmap(QPixmap(sheet.copy(i*53, mY, 33, 69)));
+    setPixmap(QPixmap(sheet.copy(index*53, mY, 33, 69)));
     if(flag){
-        if(i==2){flag=false;i=i-2;}i++;
+        if(index==2){flag=false;index=index-2;}index++;
     }else{
-        if(i==0){flag=true;i=i+2;}i--;
+        if(index==0){flag=true;index=index+2;}index--;
     }
 }
 
 void Enemigo::mover(){
-    if(x()<600){
-        setPos(x()+3, y());
-        mY=138;
+    if(mY==0){
+        setPos(x(), y()+2);
+        if(this->y()>=posY){
+            i++;
+            setOrientacion();
+        }
     }
-    else if(x() > 600 && y()>68 && mY!=0 && y()<400){
-        setPos(x(), y()-3);
-        mY=207;
+    else if(mY==69){
+        setPos(x()-2, y());
+        if(this->x()<=posX){
+            i++;
+            setOrientacion();
+        }
     }
-    else if(y()<=68 && x()<1000){
-        setPos(x()+3, y());
-        mY=138;
+    else if(mY==138){
+        setPos(x()+2, y());
+        if(this->x()>=posX){
+            i++;
+            setOrientacion();
+        }
     }
-    else if(x()>1000 && y()<500){
-        setPos(x(), y()+3);
-        mY=0;
-    }
-    else if(y()>=500){
-        setPos(x()-3, y());
-        mY=69;
+    else if(mY==207){
+        setPos(x(), y()-2);
+        if(this->y()<=posY){
+            i++;
+            setOrientacion();
+        }
     }
 }
 
 void Enemigo::setRuta(List<QPoint> pRuta){
+    i=-1;
     ruta=pRuta;
+    //pRuta.print();
 }
+
+void Enemigo::setOrientacion(){
+    if(i<ruta.get_size()-1){
+        //qDebug()<<ruta.get_Node(i+1)->get_data();
+        if(ruta.get_Node(i)->get_data().x()!=ruta.get_Node(i+1)->get_data().x()){
+            //Abajo
+            if(ruta.get_Node(i)->get_data().x()<ruta.get_Node(i+1)->get_data().x()){
+                mY=0;
+                posY=ruta.get_Node(i+1)->get_data().x()*68;
+                posX=(ruta.get_Node(i+1)->get_data().y())*68+128;
+            }//qDebug()<<posY;}
+            //Arriba
+            else{
+                mY=207;
+                posY=ruta.get_Node(i+1)->get_data().x()*68;
+                posX=(ruta.get_Node(i+1)->get_data().y())*68+128;
+            }//qDebug()<<posY;}
+        }
+        else{
+            //derecha
+            if(ruta.get_Node(i)->get_data().y()<ruta.get_Node(i+1)->get_data().y()){
+                mY=138;
+                posY=ruta.get_Node(i+1)->get_data().x()*68;
+                posX=(ruta.get_Node(i+1)->get_data().y())*68+128;
+                //qDebug()<<posX;
+            }//qDebug()<<posX;}
+            //izquierda
+            else{
+                mY=69;
+                posY=ruta.get_Node(i+1)->get_data().x()*68;
+                posX=(ruta.get_Node(i+1)->get_data().y())*68+128;
+            }//qDebug()<<posX;}
+        }
+    }
+    else{mY=138;}
+
+}
+
+void Enemigo::correr(){temporizador->start(60);}

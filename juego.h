@@ -21,6 +21,8 @@ public:
     QPointF convertirCuadricula(QPointF punto);
     int inicioX,anchoX,finX,inicioY,anchoY;
     List<QPoint> findPath(QPointF pos);
+    bool permitirTorre(QPointF pos);
+    bool noHayCamino(QPointF pos);
 };
 
 #endif // JUEGO_H

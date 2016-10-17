@@ -7,12 +7,18 @@
 #include <QPointF>
 #include <QPoint>
 #include "List.h"
+#include <QTimer>
 
 class Enemigo: public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
     Enemigo(QGraphicsItem * parent=0);
     void rotar(QPointF punto);
+    QTimer *temporizador;
+    void correr();
+    int posX=0;
+    int posY=0;
+    int mY=138;
 public slots:
     void animar();
     void mover();
@@ -20,12 +26,12 @@ public slots:
 private:
     QList<QPointF> puntos;
     QPointF destino;
-    int indice;
+    int index=0;
     int i=0;
-    int mY=138;
     bool flag=true;
     QPixmap sprite;
     QPixmap sheet;
+    void setOrientacion();
 };
 
 #endif // ENEMIGO_H
