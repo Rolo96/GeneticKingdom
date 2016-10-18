@@ -8,40 +8,54 @@
 #include "bala.h"
 #include "juego.h"
 
-Tower::Tower(QGraphicsItem *parent){
+Tower::Tower(Juego& pJuego,QGraphicsItem *parent): juego(pJuego){
     //setPixmap(QPixmap(":/Imagenes/Torre.png"));
-    sheet = QPixmap(":/Imagenes/torre3.png");
+    sheet = QPixmap(":/Imagenes/Torre.png");
     sprite = sheet.copy(0, 0, 120, 118).scaled(68,75);
     setPixmap(sprite);
-    QVector<QPointF> puntos;
-    puntos << QPoint(1,0) << QPoint(2,0) << QPoint(3,1) << QPoint(3,2) << QPoint(2,3) << QPoint(1,3) << QPoint(0,2) << QPoint(0,1);
 
-    QTimer *temporizador = new QTimer();
-    connect(temporizador,SIGNAL(timeout()),this,SLOT(anima()));
-    temporizador->start(200);
+    //----------------------------------------------------MODIFICADO-----------------------------------------
+    // create points vector
+    QVector<QPointF> points;
+    points << QPoint(1,0) << QPoint(2,0) << QPoint(3,1) << QPoint(3,2) << QPoint(2,3)
+               << QPoint(1,3) << QPoint(0,2) << QPoint(0,1);
 
-    int escala=100;
-    int n=puntos.size();
-    for(size_t i=0;i<n;i++){
-        puntos[i]*=escala;
+    // scale points
+    int SCALE_FACTOR = 75;
+    for (size_t i = 0, n = points.size(); i < n; i++){
+        points[i] *= SCALE_FACTOR;
     }
 
-    //areaAtaque = new QGraphicsPolygonItem(QPolygonF(puntos),this);
+    // create the QGraphicsPolygonItem
+    attack_area = new QGraphicsPolygonItem(QPolygonF(points),this);
+    attack_area->setPen(QPen(Qt::DotLine));
 
-    QPointF centroPoligono(1.5,1.5);
-    centroPoligono*=escala;
-    centroPoligono=mapToScene(centroPoligono);
-    QPointF centroTorre(x()+30,y()+100);
-    QLineF ln(centroPoligono,centroTorre);
-    //areaAtaque->setPos(x()+ln.dx(),y()+ln.dy());
+    // move the polygon
+    QPointF poly_center(1.5,1.5);
+    poly_center *= SCALE_FACTOR;
+    poly_center = mapToScene(poly_center);;
+    QPointF tower_center(x()+34,y()+34);
+    QLineF ln(poly_center,tower_center);
+    attack_area->setPos(x()+ln.dx(),y()+ln.dy());
 
+    // set attack_dest
+        attack_dest = QPointF(0,0);
+        has_target = false;
+        QTimer * timer = new QTimer();
+            connect(timer,SIGNAL(timeout()),this,SLOT(aquire_target()));
+            timer->start(200);
+    //---------------------------------------------------FIN-----------------------------------------
+
+    //QTimer *temporizador = new QTimer();
+    //connect(temporizador,SIGNAL(timeout()),this,SLOT(anima()));
+    //temporizador->start(200);
 }
 
 void Tower::anima() {
-    Bala * bala = new Bala();
+    Bala * bala = new Bala(juego);
 
     setPixmap(QPixmap(sheet.copy(i*120, mY, 120, 118)).scaled(68,75));
-    if(flag){
+    if(mY==0){
         if(i==0){
             bala->setX(pos().x()+34);
             bala->setY(pos().y()+68);
@@ -62,7 +76,7 @@ void Tower::anima() {
             bala->setY(pos().y()+0);
             bala->setRotation(315);
             scene()->addItem(bala);
-            flag=false;i=-1;mY=120;}i++;
+        }
     }else{
         if(i==0){
             bala->setX(pos().x()+34);
@@ -84,6 +98,71 @@ void Tower::anima() {
             bala->setY(pos().y()+68);
             bala->setRotation(135);
             scene()->addItem(bala);
-            flag=true;i=-1;mY=0;}i++;
+        }
     }
 }
+
+//----------------------------------------------------MODIFICADO-----------------------------------------
+void Tower::aquire_target(){
+    // get a list of all enemies that collide with attack_area, find the closest one
+    // and set it's position as the attack_dest
+
+    // get a list of all enemies within attack_area
+    QList<QGraphicsItem *> colliding_items = attack_area->collidingItems();
+
+    // assume tower does not have a target, unless we find one
+    has_target = false;
+
+    for (size_t i = 0, n = colliding_items.size(); i < n; ++i){
+
+        // make sure it is an enemy
+        Enemigo * enemy = dynamic_cast<Enemigo *>(colliding_items[i]);
+
+        // see if distance is closer
+        if (enemy){
+                attack_dest = enemy->pos();
+                has_target = true;
+                darOrientacion(enemy->pos());
+                anima();
+                break;
+        }
+    }
+}
+
+void Tower:: darOrientacion(QPointF posEnemigo){
+    posEnemigo= juego.convertirCuadricula(posEnemigo);
+    QPointF posTorre = juego.convertirCuadricula(this->pos());
+    if(posEnemigo.x()<posTorre.x() && posEnemigo.y()==posTorre.y()){
+        mY=120;
+        i=2;
+    }
+    else if(posEnemigo.x()>posTorre.x() && posEnemigo.y()==posTorre.y()){
+        mY=0;
+        i=2;
+    }
+    else if(posEnemigo.x()==posTorre.x() && posEnemigo.y()<posTorre.y()){
+        mY=120;
+        i=0;
+    }
+    else if(posEnemigo.x()==posTorre.x() && posEnemigo.y()>posTorre.y()){
+        mY=0;
+        i=0;
+    }
+    else if(posEnemigo.x()<posTorre.x() && posEnemigo.y()<posTorre.y()){
+        mY=120;
+        i=1;
+    }
+    else if(posEnemigo.x()>posTorre.x() && posEnemigo.y()>posTorre.y()){
+        mY=0;
+        i=1;
+    }
+    else if(posEnemigo.x()<posTorre.x() && posEnemigo.y()>posTorre.y()){
+        mY=120;
+        i=3;
+    }
+    else if(posEnemigo.x()>posTorre.x() && posEnemigo.y()<posTorre.y()){
+        mY=0;
+        i=3;
+    }
+}
+//---------------------------------------------------FIN-----------------------------------------

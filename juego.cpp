@@ -31,18 +31,9 @@ Juego::Juego(){
     setFixedSize(1280,680);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-
-
-    for(int i=0;i<1;i++){
-        Enemigo * enemigo = new Enemigo();
-        scene->addItem(enemigo);
-        enemigo->setPos(110,0);
-        listaEnemigos.add_end(enemigo);
-        listaEnemigos.get_Node(0)->get_data()->setRuta(findPath(convertirCuadricula(listaEnemigos.get_Node(0)->get_data()->pos())));
-        listaEnemigos.get_Node(0)->get_data()->setPos(110,0);
-        listaEnemigos.get_Node(0)->get_data()->correr();
-    }
+    QTimer *temporizador = new QTimer();
+    connect(temporizador,SIGNAL(timeout()),this,SLOT(crearEnemigos()));
+    temporizador->start(3000);
 }
 
 void Juego:: mouseReleaseEvent ( QMouseEvent * event ){
@@ -50,18 +41,21 @@ void Juego:: mouseReleaseEvent ( QMouseEvent * event ){
   {
       QPointF punto = convertirCuadricula(event->pos());
       if (punto.x()!=-1 && permitirTorre(punto)){
-
-              QPointF puntoCreacion;
-              puntoCreacion.setX(listaEnemigos.get_Node(0)->get_data()->posX);
-              puntoCreacion.setY(listaEnemigos.get_Node(0)->get_data()->posY);
-              //qDebug()<<puntoCreacion;
-              //findPath(puntoCreacion);
-              punto = convertirPunto(punto);
-              Tower * tower = new Tower();
-              scene->addItem(tower);
-              tower->setPos(punto);
-              listaEnemigos.get_Node(0)->get_data()->setRuta(findPath(convertirCuadricula(puntoCreacion)));
-
+        //qDebug()<<puntoCreacion;
+        //findPath(puntoCreacion);
+        punto = convertirPunto(punto);
+        Tower * tower = new Tower(*this);
+        scene->addItem(tower);
+        tower->setPos(punto);
+        for(int i=0;i<scene->items().size();i++){
+            Enemigo * enemy = dynamic_cast<Enemigo *>(scene->items()[i]);
+            if (enemy){
+                QPointF puntoCreacion;
+                puntoCreacion.setX(enemy->posX);
+                puntoCreacion.setY(enemy->posY);
+                enemy->setRuta(findPath(convertirCuadricula(puntoCreacion)));
+            }
+        }
       }
   }
 }
@@ -106,46 +100,71 @@ bool Juego::noHayCamino(QPointF pos){
 }
 
 bool Juego::permitirTorre(QPointF pos){
-    for(int i=0;i<listaEnemigos.get_size();i++){
-        QPointF puntoCreacion;
-        puntoCreacion.setX(listaEnemigos.get_Node(i)->get_data()->x());
-        puntoCreacion.setY(listaEnemigos.get_Node(i)->get_data()->y());
-        int mY=listaEnemigos.get_Node(i)->get_data()->mY;
-        puntoCreacion=convertirCuadricula(puntoCreacion);
-        if(path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]==0){
-            return false;
-        }
-        else if(noHayCamino(pos)){
-            path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]=1;
-           return false;
-        }
-        else if(puntoCreacion==pos){
-            return false;
-        }
-        else if(mY==0){
-            pos.setY(pos.y()-1);
-            if(puntoCreacion==pos){
+    for(int i=0;i<scene->items().size();i++){
+        Enemigo * enemy = dynamic_cast<Enemigo *>(scene->items()[i]);
+        if (enemy){
+            QPointF puntoCreacion;
+            puntoCreacion.setX(enemy->x());
+            puntoCreacion.setY(enemy->y());
+            int mY=enemy->mY;
+            puntoCreacion=convertirCuadricula(puntoCreacion);
+            if(path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]==0){
                 return false;
             }
-        }
-        else if(mY==207){
-            pos.setY(pos.y()+1);
-            if(puntoCreacion==pos){
+            else if(noHayCamino(pos)){
+                path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]=1;
+               return false;
+            }
+            else if(puntoCreacion==pos){
+                path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]=1;
                 return false;
             }
-        }
-        else if(mY==69){
-            pos.setX(pos.x()+1);
-            if(puntoCreacion==pos){
-                return false;
+            else if(mY==0){
+                pos.setY(pos.y()-1);
+                if(puntoCreacion==pos){
+                    path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]=1;
+                    return false;
+                }
             }
-        }
-        else if(mY==138){
-            pos.setX(pos.x()-1);
-            if(puntoCreacion==pos){
-                return false;
+            else if(mY==207){
+                pos.setY(pos.y()+1);
+                if(puntoCreacion==pos){
+                    path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]=1;
+                    return false;
+                }
+            }
+            else if(mY==69){
+                pos.setX(pos.x()+1);
+                if(puntoCreacion==pos){
+                    path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]=1;
+                    return false;
+                }
+            }
+            else if(mY==138){
+                pos.setX(pos.x()-1);
+                if(puntoCreacion==pos){
+                    path->grid[static_cast<int>(pos.y())][static_cast<int>(pos.x())]=1;
+                    return false;
+                }
             }
         }
     }
     return true;
+}
+
+void Juego::matar(Enemigo* enemigo){
+    scene->removeItem(enemigo);
+}
+
+void Juego::crearEnemigos(){
+
+    for(int i=0;i<1;i++){
+        Enemigo * enemigo = new Enemigo();
+        scene->addItem(enemigo);
+        enemigo->setPos(110,0);
+        //listaEnemigos.add_end(enemigo);
+        enemigo->setRuta(findPath(convertirCuadricula(enemigo->pos())));
+        enemigo->setPos(110,0);
+        enemigo->correr();
+    }
 }

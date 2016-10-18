@@ -57,7 +57,6 @@ void Enemigo::mover(){
             setOrientacion();
         }
     }
-    colisiones();
 }
 
 void Enemigo::setRuta(List<QPoint> pRuta){
@@ -103,7 +102,7 @@ void Enemigo::setOrientacion(){
 
 }
 
-void Enemigo::correr(){temporizador->start(60);}
+void Enemigo::correr(){temporizador->start(20);}
 
 void Enemigo::colisiones(){
 

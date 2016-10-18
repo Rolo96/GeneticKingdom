@@ -10,12 +10,13 @@
 #include <QPoint>
 #include <QPointF>
 #include "Pathfinding.h"
+#include <QObject>
 
 class Juego: public QGraphicsView {
+    Q_OBJECT
 public:
     Juego();
     QGraphicsScene * scene;
-    List<Enemigo *> listaEnemigos;
     void mouseReleaseEvent ( QMouseEvent * event );
     QPointF convertirPunto(QPointF punto);
     QPointF convertirCuadricula(QPointF punto);
@@ -23,6 +24,9 @@ public:
     List<QPoint> findPath(QPointF pos);
     bool permitirTorre(QPointF pos);
     bool noHayCamino(QPointF pos);
+    void matar(Enemigo* enemigo);
+public slots:
+    void crearEnemigos();
 };
 
 #endif // JUEGO_H

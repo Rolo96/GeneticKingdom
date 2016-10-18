@@ -3,12 +3,13 @@
 
 #include <QGraphicsPixmapItem>
 #include <QObject>
-
+class Juego;
 class Bala: public QObject,public QGraphicsPixmapItem{
     Q_OBJECT
 public:
-    Bala(QGraphicsItem * parent=0);
+    Bala(Juego& pJuego, QGraphicsItem * parent=0);
     void colisiones();
+    Juego &juego;
 public slots:
     void moverBala();
 private:

@@ -3,8 +3,9 @@
 #include <QTimer>
 #include <qmath.h>
 #include "juego.h"
+#include <stdlib.h>
 
-Bala::Bala(QGraphicsItem *parent)
+Bala::Bala(Juego& pJuego,QGraphicsItem *parent): juego(pJuego)
 {
     setPixmap(QPixmap(":/Imagenes/bullet1"));
 
@@ -32,6 +33,8 @@ void Bala::colisiones(){
         if (item){
             item->vida-=1;
             scene()->removeItem(this);
+            if (item->vida<=0){juego.matar(item);
+            }
         }
     }
 }
