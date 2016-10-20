@@ -20,6 +20,9 @@ Juego::Juego(){
     anchoX=68;
     inicioY=0;
     anchoY=68;
+    construir=false;
+    cursor=nullptr;
+    setMouseTracking(true);
 
     path = new Pathfinding();
     scene = new QGraphicsScene(this);
@@ -28,36 +31,95 @@ Juego::Juego(){
     QPixmap pix(":/Imagenes/Map.jpg");
     scene->addPixmap(pix);
 
+
     setFixedSize(1280,680);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     QTimer *temporizador = new QTimer();
     connect(temporizador,SIGNAL(timeout()),this,SLOT(crearEnemigos()));
     temporizador->start(3000);
-}
 
-void Juego:: mouseReleaseEvent ( QMouseEvent * event ){
-  if(event->button() == Qt::LeftButton)
-  {
-      QPointF punto = convertirCuadricula(event->pos());
-      if (punto.x()!=-1 && permitirTorre(punto)){
-        //qDebug()<<puntoCreacion;
-        //findPath(puntoCreacion);
-        punto = convertirPunto(punto);
-        Tower * tower = new Tower(*this);
-        scene->addItem(tower);
-        tower->setPos(punto);
-        for(int i=0;i<scene->items().size();i++){
-            Enemigo * enemy = dynamic_cast<Enemigo *>(scene->items()[i]);
-            if (enemy){
-                QPointF puntoCreacion;
-                puntoCreacion.setX(enemy->posX);
-                puntoCreacion.setY(enemy->posY);
-                enemy->setRuta(findPath(convertirCuadricula(puntoCreacion)));
-            }
+        torres = new QGraphicsPixmapItem();
+        sheet = QPixmap(":/Imagenes/torre1.png");
+        sprite = sheet.copy(0, 0, 120, 118).scaled(68,75);
+        torres->setPixmap(sprite);
+        scene->addItem(torres);
+        torres->setPos(0,0);
+        torres1 = new QGraphicsPixmapItem();
+        sheet = QPixmap(":/Imagenes/torre2.png");
+        sprite = sheet.copy(0, 0, 120, 118).scaled(68,75);
+        torres1->setPixmap(sprite);
+        scene->addItem(torres1);
+        torres1->setPos(0,75);
+        torres2 = new QGraphicsPixmapItem();
+        sheet = QPixmap(":/Imagenes/torre3.png");
+        sprite = sheet.copy(0, 0, 120, 118).scaled(68,75);
+        torres2->setPixmap(sprite);
+        scene->addItem(torres2);
+        torres2->setPos(0,150);
+}
+void Juego::setCursor(QString filename,QPointF pos){
+    construir=true;
+    cursor = new QGraphicsPixmapItem();
+    sheet = QPixmap(filename);
+    sprite = sheet.copy(0, 0, 120, 118).scaled(68,75);
+    cursor->setPixmap(sprite);
+    scene->addItem(cursor);
+    cursor->setPos(pos.x(),pos.y());
+}
+void Juego::mouseMoveEvent(QMouseEvent *event){
+    if(construir){
+        qDebug()<<"mueve";
+        cursor->setPos(event->pos());
+    }
+}
+void Juego:: mousePressEvent ( QMouseEvent * event ){
+    if(construir){
+        if(event->button() == Qt::LeftButton)
+        {
+            QPointF punto = convertirCuadricula(event->pos());
+            if (punto.x()!=-1 && permitirTorre(punto)){
+              //qDebug()<<puntoCreacion;
+              //findPath(puntoCreacion);
+              punto = convertirPunto(punto);
+              Tower * tower = new Tower(*this,sheet);
+              scene->addItem(tower);
+              tower->setPos(punto);
+              for(int i=0;i<scene->items().size();i++){
+                  Enemigo * enemy = dynamic_cast<Enemigo *>(scene->items()[i]);
+                  if (enemy){
+                      QPointF puntoCreacion;
+                      puntoCreacion.setX(enemy->posX);
+                      puntoCreacion.setY(enemy->posY);
+                      enemy->setRuta(findPath(convertirCuadricula(puntoCreacion)));
+                  }
+              }
+              construir=false;
+              delete cursor;
+              cursor=nullptr;
+            }else if(event->pos().x()<68 && event->pos().y()<75){
+                construir=false;
+                delete cursor;
+                cursor=nullptr;
+             }else if(event->pos().x()<68 && (event->pos().y()<150 && event->pos().y()>75)){
+                construir=false;
+                delete cursor;
+                cursor=nullptr;
+             }else if(event->pos().x()<68 && (event->pos().y()<225 && event->pos().y()>150)){
+                construir=false;
+                delete cursor;
+                cursor=nullptr;
+             }
         }
-      }
-  }
+    }else{
+        if(event->pos().x()<68 && event->pos().y()<75){
+           setCursor(":/Imagenes/torre1.png",event->pos());
+        }else if(event->pos().x()<68 && (event->pos().y()<150 && event->pos().y()>75)){
+           setCursor(":/Imagenes/torre2.png",event->pos());
+        }else if(event->pos().x()<68 && (event->pos().y()<225 && event->pos().y()>150)){
+            setCursor(":/Imagenes/torre3.png",event->pos());
+        }
+    }
 }
 
 QPointF Juego::convertirPunto(QPointF punto){

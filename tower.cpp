@@ -8,9 +8,8 @@
 #include "bala.h"
 #include "juego.h"
 
-Tower::Tower(Juego& pJuego,QGraphicsItem *parent): juego(pJuego){
-    //setPixmap(QPixmap(":/Imagenes/Torre.png"));
-    sheet = QPixmap(":/Imagenes/Torre.png");
+Tower::Tower(Juego& pJuego,QPixmap sheet,QGraphicsItem *parent): juego(pJuego){
+    this->sheet=sheet;
     sprite = sheet.copy(0, 0, 120, 118).scaled(68,75);
     setPixmap(sprite);
 

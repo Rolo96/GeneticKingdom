@@ -16,8 +16,16 @@ class Juego: public QGraphicsView {
     Q_OBJECT
 public:
     Juego();
+    bool construir;
+    QPixmap sprite;
+    QPixmap sheet;
     QGraphicsScene * scene;
-    void mouseReleaseEvent ( QMouseEvent * event );
+    QGraphicsPixmapItem * cursor;
+    QGraphicsPixmapItem * torres;
+    QGraphicsPixmapItem * torres1;
+    QGraphicsPixmapItem * torres2;
+    void mousePressEvent( QMouseEvent * event );
+    void mouseMoveEvent(QMouseEvent *event);
     QPointF convertirPunto(QPointF punto);
     QPointF convertirCuadricula(QPointF punto);
     int inicioX,anchoX,finX,inicioY,anchoY;
@@ -25,6 +33,7 @@ public:
     bool permitirTorre(QPointF pos);
     bool noHayCamino(QPointF pos);
     void matar(Enemigo* enemigo);
+    void setCursor(QString filename,QPointF pos);
 public slots:
     void crearEnemigos();
 };

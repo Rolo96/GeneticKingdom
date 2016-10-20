@@ -9,7 +9,7 @@ class Juego;
 class Tower:public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
-    Tower(Juego& pJuego, QGraphicsItem * parent=0);
+    Tower(Juego& pJuego,QPixmap sheet,QGraphicsItem * parent=0);
     void darOrientacion(QPointF posEnemigo);
 public slots:
     void anima();
