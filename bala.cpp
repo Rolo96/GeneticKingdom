@@ -14,8 +14,13 @@ Bala::Bala(Juego& pJuego,QGraphicsItem *parent): juego(pJuego)
     timer->start(50);
 }
 
+Bala::~Bala(){}
+
 void Bala::moverBala()
 {
+    if(this->x()>1280||this->x()<0||this->y()>680||this->y()<0){
+        juego.borrarBala(this);
+    }
     int Step=30;
     double angulo=rotation();
 
@@ -32,9 +37,10 @@ void Bala::colisiones(){
         Enemigo * item= dynamic_cast<Enemigo *>(i);
         if (item){
             item->vida-=1;
-            scene()->removeItem(this);
+            juego.borrarBala(this);
             if (item->vida<=0){juego.matar(item);
             }
+            break;
         }
     }
 }

@@ -8,19 +8,23 @@
 #include <QPoint>
 #include "List.h"
 #include <QTimer>
-
+class Juego;
 class Enemigo: public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
-    Enemigo(QGraphicsItem * parent=0);
+    Enemigo(Juego& pJuego, QGraphicsItem * parent=0);
     void rotar(QPointF punto);
+    Juego &juego;
     QTimer *temporizador;
     void correr();
     int posX=0;
     int posY=0;
     int mY=138;
-    int vida=6;
+    int vida=200;
+    int id;
+    List<QPoint> ruta;
     void colisiones();
+    ~Enemigo();
 public slots:
     void animar();
     void mover();

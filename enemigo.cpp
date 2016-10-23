@@ -5,10 +5,10 @@
 #include "juego.h"
 using namespace std;
 
-List<QPoint> ruta;
+
 List<QPoint> rutaNueva;
-Enemigo::Enemigo(QGraphicsItem *parent)
-{
+Enemigo::Enemigo(Juego& pJuego,QGraphicsItem *parent): juego(pJuego){
+    ruta = *new List<QPoint>();
     sheet = QPixmap(":/Imagenes/Macho.png");
     sprite = sheet.copy(0, 138, 33, 69);
     setPixmap(sprite);
@@ -18,6 +18,8 @@ Enemigo::Enemigo(QGraphicsItem *parent)
     connect(temporizador2,SIGNAL(timeout()),this,SLOT(animar()));
     temporizador2->start(50);
 }
+
+Enemigo::~Enemigo(){}
 
 void Enemigo::animar() {
     setPixmap(QPixmap(sheet.copy(index*53, mY, 33, 69)));
@@ -57,11 +59,18 @@ void Enemigo::mover(){
             setOrientacion();
         }
     }
+    if(this->x()>1280){
+        juego.matar(this);
+    }
 }
 
 void Enemigo::setRuta(List<QPoint> pRuta){
     i=-1;
     ruta=pRuta;
+    //qDebug()<<"Inicio";
+    //qDebug()<<id;
+    //qDebug()<<ruta.get_head()->get_data();
+    //qDebug()<<ruta.get_Node(1)->get_data();
     //pRuta.print();
 }
 
@@ -99,7 +108,10 @@ void Enemigo::setOrientacion(){
         }
     }
     else{mY=138;}
-
+    //qDebug()<<"Punto";
+    //qDebug()<<id;
+    //qDebug()<<*ruta;
+    //qDebug()<<ruta.get_Node(i)->get_data();
 }
 
 void Enemigo::correr(){temporizador->start(20);}

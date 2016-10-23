@@ -10,6 +10,7 @@ public:
     Bala(Juego& pJuego, QGraphicsItem * parent=0);
     void colisiones();
     Juego &juego;
+    ~Bala();
 public slots:
     void moverBala();
 private:

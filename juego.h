@@ -6,6 +6,7 @@
 #include "List.h"
 #include "List.cpp"
 #include "enemigo.h"
+#include "bala.h"
 #include <QMouseEvent>
 #include <QPoint>
 #include <QPointF>
@@ -34,8 +35,11 @@ public:
     bool noHayCamino(QPointF pos);
     void matar(Enemigo* enemigo);
     void setCursor(QString filename,QPointF pos);
+    void borrarBala(Bala* bala);
 public slots:
     void crearEnemigos();
 };
 
 #endif // JUEGO_H
+
+

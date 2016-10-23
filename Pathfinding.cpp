@@ -30,6 +30,7 @@ bool Pathfinding:: isDestination(int row, int col, Pair dest){
 List<QPoint> Pathfinding:: trazar(QPointF pos){
     Pair src = make_pair(pos.y(),pos.x());
     Pair dest = make_pair(6, 15);
+    //qDebug()<<"INICIA";
     return aStarSearch(grid, src, dest);
 }
 
@@ -79,6 +80,7 @@ void Pathfinding::tracePath(cell cellDetails[][COL], Pair dest, List<QPoint>* pP
 List<QPoint> Pathfinding:: aStarSearch(int grid[][COL], Pair src, Pair dest)
 {
     List<QPoint> puntos;
+    //qDebug()<<puntos.get_size();
     List<QPoint> fail;
     QPoint punto;
     punto.setX(-1);
