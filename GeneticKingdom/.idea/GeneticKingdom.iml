@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/GeneticKingdom-e3194ee0/e3194ee0/Debug1/GeneticKingdom_automoc.cpp">
+      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/GeneticKingdom-e3194ee0/e3194ee0/Debug1/GeneticKingdom_automoc.cpp" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/GeneticKingdom-e3194ee0/e3194ee0/MinSizeRel1/GeneticKingdom_automoc.cpp">
+      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/GeneticKingdom-e3194ee0/e3194ee0/MinSizeRel1/GeneticKingdom_automoc.cpp" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/GeneticKingdom-e3194ee0/e3194ee0/RelWithDebInfo1/GeneticKingdom_automoc.cpp">
+      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/GeneticKingdom-e3194ee0/e3194ee0/RelWithDebInfo1/GeneticKingdom_automoc.cpp" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/GeneticKingdom-e3194ee0/e3194ee0/Release1/GeneticKingdom_automoc.cpp">
+      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/GeneticKingdom-e3194ee0/e3194ee0/Release1/GeneticKingdom_automoc.cpp" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.EstructurasDatos/Node.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.EstructurasDatos/List.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.EstructurasDatos/Array.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.EstructurasDatos/List.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.EstructurasDatos/Node.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.EstructurasDatos/Array.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.UI/juego.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.UI/juego.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Main/main.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Logica/enemigo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Logica/tower.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Logica/bala.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Logica/enemigo.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Logica/Pathfinding.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Logica/Pathfinding.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Logica/tower.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/com.GeneticKingdom.Logica/bala.cpp" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
+          <root url="file:///usr/local/include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
+          <root url="file:///usr/local/include" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>
